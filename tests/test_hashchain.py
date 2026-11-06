@@ -3,6 +3,7 @@
 Запуск з папки проєкту:  python -m pytest tests -v
 Результати використано в таблиці 4.1 курсової роботи.
 """
+
 import copy
 import json
 import sys
@@ -11,7 +12,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
 
-from hashchain import GENESIS_HASH, build_chain, compute_hash, reconcile, verify_chain  # noqa: E402
+from hashchain import (
+    GENESIS_HASH,
+    build_chain,
+    compute_hash,
+    reconcile,
+    verify_chain,
+)  # noqa: E402
 
 
 def make_events(count=21):
@@ -19,11 +26,15 @@ def make_events(count=21):
     events = []
     for i in range(count):
         kind = ["action_approved", "action_blocked", "action_pending"][i % 3]
-        events.append({
-            "event_type": kind,
-            "event_time": f"2026-10-25T15:{i:02d}:00.000Z",
-            "payload": json.dumps({"actionId": f"act_{i}", "target": f"src/file_{i}.ts"}),
-        })
+        events.append(
+            {
+                "event_type": kind,
+                "event_time": f"2026-10-25T15:{i:02d}:00.000Z",
+                "payload": json.dumps(
+                    {"actionId": f"act_{i}", "target": f"src/file_{i}.ts"}
+                ),
+            }
+        )
     return events
 
 
@@ -36,7 +47,9 @@ def rehash_from(chain, start):
     prev = chain[start]["prev_hash"]
     for e in chain[start:]:
         e["prev_hash"] = prev
-        e["current_hash"] = compute_hash(prev, e["seq"], e["event_type"], e["event_time"], e["payload"])
+        e["current_hash"] = compute_hash(
+            prev, e["seq"], e["event_type"], e["event_time"], e["payload"]
+        )
         prev = e["current_hash"]
 
 
@@ -68,10 +81,12 @@ def test_t2_current_hash_recomputed_only_for_one_entry():
     chain = fresh_chain()
     chain[7]["payload"] = json.dumps({"actionId": "act_7", "verdict": "approved"})
     e = chain[7]
-    e["current_hash"] = compute_hash(e["prev_hash"], e["seq"], e["event_type"], e["event_time"], e["payload"])
+    e["current_hash"] = compute_hash(
+        e["prev_hash"], e["seq"], e["event_type"], e["event_time"], e["payload"]
+    )
     report = verify_chain(chain)
     assert not report["ok"]
-    assert report["first_broken_seq"] == 9          # розрив видно на наступному записі
+    assert report["first_broken_seq"] == 9  # розрив видно на наступному записі
     assert report["break_type"] == "chain_broken"
 
 
@@ -100,8 +115,8 @@ def test_t5_entries_swapped():
 def test_t6_tail_cut_is_not_seen_by_chain_but_seen_by_reconcile():
     original = fresh_chain()
     cut = original[:-3]
-    assert verify_chain(cut)["ok"] is True           # сам ланцюг цього не бачить
-    diffs = reconcile(cut, original)                 # а звірка з оригіналом бачить
+    assert verify_chain(cut)["ok"] is True  # сам ланцюг цього не бачить
+    diffs = reconcile(cut, original)  # а звірка з оригіналом бачить
     assert [d["seq"] for d in diffs] == [19, 20, 21]
 
 
@@ -110,7 +125,7 @@ def test_t7_full_resync_is_not_seen_by_chain_but_seen_by_reconcile():
     forged = copy.deepcopy(original)
     forged[7]["payload"] = json.dumps({"actionId": "act_7", "verdict": "approved"})
     rehash_from(forged, 7)
-    assert verify_chain(forged)["ok"] is True        # ланцюг формально цілий
+    assert verify_chain(forged)["ok"] is True  # ланцюг формально цілий
     diffs = reconcile(forged, original)
     assert diffs and diffs[0]["seq"] == 8
 
@@ -121,8 +136,14 @@ def test_reconcile_equal_copies():
 
 
 def test_performance_10000_entries():
-    events = [{"event_type": "action_approved", "event_time": "2026-10-25T15:00:00.000Z",
-               "payload": json.dumps({"i": i})} for i in range(10_000)]
+    events = [
+        {
+            "event_type": "action_approved",
+            "event_time": "2026-10-25T15:00:00.000Z",
+            "payload": json.dumps({"i": i}),
+        }
+        for i in range(10_000)
+    ]
     start = time.perf_counter()
     chain = build_chain(events)
     build_ms = (time.perf_counter() - start) * 1000
