@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRACE-AI-gate — панель нагляду</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>TRACE-AI-gate</h1>
+    <span class="subtitle">Панель людського нагляду за ШІ-агентами програмування</span>
+  </header>
+
+  <div id="banner" class="banner">Перевірка журналу...</div>
+
+  <div class="layout">
+    <nav class="menu" id="menu">
+      <button data-view="overview" class="active">Огляд</button>
+      <button data-view="sessions">Сесії агента</button>
+      <button data-view="pending">Очікують рішення <span id="pending-count" class="count"></span></button>
+      <button data-view="journal">Журнал доказів</button>
+      <button data-view="rules">Правила нагляду</button>
+      <button data-view="threats">Модель загроз</button>
+    </nav>
+
+    <main id="content"></main>
+  </div>
+
+   <!-- Вікно ухвалення рішення (окремий захищений канал)  -->
+  <dialog id="decision-dialog">
+    <form method="dialog" id="decision-form">
+      <h3 id="dialog-title">Рішення людини</h3>
+      <p id="dialog-target" class="muted"></p>
+      <label>PIN-код
+        <input type="password" id="pin" inputmode="numeric" autocomplete="off" required>
+      </label>
+      <label>Коментар (необов'язково)
+        <textarea id="note" rows="2"></textarea>
+      </label>
+      <p id="dialog-error" class="error"></p>
+      <div class="dialog-buttons">
+        <button type="button" id="dialog-cancel">Скасувати</button>
+        <button type="submit" id="dialog-submit">Підтвердити</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

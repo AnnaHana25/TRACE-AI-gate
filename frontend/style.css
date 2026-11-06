@@ -1,0 +1,168 @@
+/* Стилі панелі нагляду */
+:root {
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #6b7785;
+  --line: #dde3ea;
+  --accent: #2b5fd9;
+  --green: #1a7f46;
+  --green-bg: #e3f5ea;
+  --red: #b3261e;
+  --red-bg: #fde8e6;
+  --yellow: #8a5a00;
+  --yellow-bg: #fff3d6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 24px;
+  background: #1c2a45;
+  color: #fff;
+}
+.topbar h1 { margin: 0; font-size: 20px; }
+.subtitle { color: #b8c4dc; font-size: 14px; }
+
+/* Смуга стану журналу */
+.banner {
+  padding: 10px 24px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+.banner.ok { background: var(--green-bg); color: var(--green); }
+.banner.bad { background: var(--red-bg); color: var(--red); }
+
+.layout { display: flex; gap: 20px; padding: 20px 24px; align-items: flex-start; }
+
+.menu { display: flex; flex-direction: column; gap: 4px; width: 220px; flex-shrink: 0; }
+.menu button {
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 15px;
+  cursor: pointer;
+  color: var(--text);
+}
+.menu button:hover { background: #e6ebf3; }
+.menu button.active { background: var(--accent); color: #fff; }
+
+.count {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--yellow-bg);
+  color: var(--yellow);
+  font-size: 12px;
+  text-align: center;
+}
+.count:empty { display: none; }
+
+main { flex: 1; min-width: 0; }
+h2 { margin: 0 0 14px; font-size: 20px; }
+h3 { margin: 0 0 8px; font-size: 16px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 14px; }
+.stat .num { font-size: 28px; font-weight: 700; }
+.stat .label { color: var(--muted); font-size: 13px; }
+
+.muted { color: var(--muted); font-size: 13px; }
+.error { color: var(--red); min-height: 18px; margin: 4px 0; }
+
+/* Значки вердиктів, статусів і серйозності */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.green { background: var(--green-bg); color: var(--green); }
+.badge.red { background: var(--red-bg); color: var(--red); }
+.badge.yellow { background: var(--yellow-bg); color: var(--yellow); }
+.badge.gray { background: #e8ecf1; color: #44505e; }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 13px; }
+tr.bad-row td { background: var(--red-bg); }
+
+.hash { font-family: Consolas, monospace; font-size: 12px; }
+
+pre {
+  background: #1e2430;
+  color: #e6e9ef;
+  padding: 10px 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+  margin: 8px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.violation {
+  border-left: 4px solid var(--red);
+  background: var(--red-bg);
+  padding: 8px 12px;
+  margin: 8px 0;
+  border-radius: 0 6px 6px 0;
+}
+.violation.warn { border-left-color: #d49a00; background: var(--yellow-bg); }
+
+.row { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+.session-head { cursor: pointer; }
+.session-head:hover { background: #f8fafc; }
+
+.bar { height: 8px; border-radius: 4px; background: #e8ecf1; overflow: hidden; margin-top: 4px; }
+.bar > span { display: block; height: 100%; background: var(--red); }
+
+button.action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+button.approve { background: var(--green); color: #fff; }
+button.reject { background: var(--red); color: #fff; }
+
+/* Вікно рішення */
+dialog { border: 1px solid var(--line); border-radius: 10px; padding: 20px; width: 400px; max-width: 94vw; }
+dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+dialog label { display: block; margin: 10px 0; font-size: 14px; }
+dialog input, dialog textarea { width: 100%; margin-top: 4px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+.dialog-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+.dialog-buttons button { padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+.dialog-buttons button[type="submit"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+@media (max-width: 800px) {
+  .layout { flex-direction: column; }
+  .menu { width: 100%; flex-direction: row; flex-wrap: wrap; }
+}
