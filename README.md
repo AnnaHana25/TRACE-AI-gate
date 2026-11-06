@@ -30,7 +30,7 @@ psql -d trace_gate -f sql/schema.sql
 python backend/seed.py
 
 # 4. запустити сервер
-uvicorn main:app --app-dir backend --port 8000
+python -m uvicorn main:app --app-dir backend --port 8000
 ```
 
 Панель: http://localhost:8000
